@@ -3,6 +3,12 @@ import { saveSecret, getSecret, deleteSecret, generatePathIndex } from '../src/r
 import { db, bootstrap } from '../src/index.js';
 import * as schema from '../src/schema.js';
 import { sql } from 'drizzle-orm';
+import { migrate } from 'drizzle-orm/libsql/migrator';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const { secrets, user, organization, projects, environments } = schema;
 

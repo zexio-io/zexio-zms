@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "test": "vitest run --fileParallelism=false",
+    "test": "npx drizzle-kit push && vitest run --fileParallelism=false",
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
