@@ -1,0 +1,45 @@
+{
+  "name": "@zexio/zms-core",
+  "version": "1.0.0-preview",
+  "author": "Zexio.io",
+  "license": "BSL-1.1",
+  "private": true,
+  "type": "module",
+  "description": "Zexio Secret Management System - Core Cryptographic Logic",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/schema.ts",
+    "drizzle.config.ts"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "^4.1.0",
+    "drizzle-kit": "^0.31.10",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-kms": "^3.1012.0",
+    "@google-cloud/secret-manager": "^6.1.1",
+    "@libsql/client": "^0.14.0",
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.45.1"
+  }
+}

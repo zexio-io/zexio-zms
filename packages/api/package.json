@@ -1,0 +1,49 @@
+{
+  "name": "@zexio/zms-api",
+  "version": "1.0.0-preview",
+  "author": "Zexio.io",
+  "license": "BSL-1.1",
+  "private": true,
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx --watch --env-file=../../.env.local src/index.ts",
+    "build": "tsup src/index.ts --format cjs --clean",
+    "start": "node dist/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hono/mcp": "^0.2.4",
+    "@hono/node-server": "^1.13.7",
+    "@hono/zod-openapi": "^0.18.3",
+    "@hono/zod-validator": "^0.4.1",
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@scalar/hono-api-reference": "^0.10.4",
+    "@zexio/zms-core": "workspace:*",
+    "bcryptjs": "^3.0.3",
+    "better-auth": "^1.5.5",
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.45.1",
+    "hono": "^4.6.14",
+    "jose": "^6.2.2",
+    "jsonwebtoken": "^9.0.2",
+    "otpauth": "^9.5.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@libsql/client": "^0.14.0",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.10.2",
+    "tsc-alias": "^1.8.8",
+    "tsup": "^8.0.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^2.1.8"
+  }
+}

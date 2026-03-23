@@ -1,0 +1,53 @@
+## 🛠️ `zms init`
+
+Initializes the local ZMS environment, database schema, and Master Keys. This is the first command you should run after installation.
+
+```sh
+zms init
+```
+
+## 🚀 `zms start`
+
+Starts the ZMS Unified Engine (API, Dashboard, and MCP Bridge).
+
+```sh
+zms start [--port <number>]
+```
+
+- **`--port`**: (Optional) The port to listen on. Defaults to `3030`.
+
+## 🏃 `zms run`
+
+Runs a command while automatically injecting secrets from the ZMS Vault into the process environment.
+
+```sh
+zms run [--project <id>] [--service <name>] [--env <name>] [--token <string>] -- <command>
+```
+
+- **`--project`**: (Optional) The target project ID. Auto-detected if a scoped `ZMS_TOKEN` is present in `.env`.
+- **`--env`**: (Optional) Environment name (default: `production`).
+- **`--token`**: (Optional) API Access Token.
+
+## 🔍 `zms status`
+
+Checks the current status of the ZMS server and database connection.
+
+```sh
+zms status
+```
+
+## 🛑 `zms stop`
+
+Stops the running ZMS Unified Engine.
+
+```sh
+zms stop
+```
+
+## 🧹 `zms reset`
+
+Clears all local data, including the database and Master Keys. **WARNING: IRREVERSIBLE.**
+
+```sh
+zms reset [--force]
+```

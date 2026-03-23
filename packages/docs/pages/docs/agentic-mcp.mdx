@@ -1,0 +1,94 @@
+# Agentic MCP Integration
+
+ZMS is the first secret manager designed with native **Model Context Protocol (MCP)** support. It allows AI Agents to discover, sync, and retrieve secrets securely.
+
+## 🤖 What is ZMS MCP?
+
+MCP is an open standard that allows AI Agents (like GPT-4o, Claude, or local LLMs) to connect to external tools and data sources. The ZMS MCP Bridge acts as a secure gateway, providing your agents with a set of "Secret Management" skills.
+
+## 📡 Connecting Your Agent
+
+To connect an AI Agent to ZMS, you need the **MCP Bridge URL** and an **MCP Auth Token**.
+
+1.  **Start ZMS**: Run `zms start` (Default port: 3030).
+2.  **MCP Endpoint**: Your bridge is active at `http://localhost:3030/mcp`.
+3.  **Generate Token**: Go to the Dashboard > **MCP Settings** and generate a `ZMS_MCP_TOKEN`.
+
+### Example Agent Configuration (Claude Desktop / Cursor)
+```json
+{
+  "mcpServers": {
+    "zms": {
+      "type": "sse",
+      "url": "http://localhost:3030/mcp",
+      "headers": {
+        "Authorization": "Bearer your_mcp_token_here"
+      }
+    }
+  }
+}
+```
+
+## 🛠️ MCP Tool Reference
+
+Once connected, your agent will have access to the following 9 native tools, grouped by their orchestration purpose:
+
+### Project Management
+
+#### `list_projects`
+Lists all projects belonging to your organization. Useful for initial workspace discovery.
+- **Input**: None
+
+#### `provision_project`
+**The Onboarding Power Tool**. Atomically creates a project, its default environments, and initial services.
+- **`projectName`**: (String) Name of the new project.
+- **`services`**: (Array of Strings, Optional) List of initial service names to create.
+
+### Service Management
+
+#### `list_services`
+Lists all services within a specific project.
+- **`projectId`**: (String) The UUID of the project.
+
+#### `add_service`
+Adds a new service to an existing project and generates a development token.
+- **`projectId`**: (String) The UUID of the project.
+- **`serviceName`**: (String) Name of the new service.
+
+### Secret Management (Dev Only)
+
+#### `list_secrets`
+Lists all secret keys (paths) available in the **development** environment.
+- **`projectId`**: (String) The UUID of the project.
+- **`serviceName`**: (String) The service name.
+
+#### `save_secret`
+Saves a single encrypted secret to the development environment.
+- **`projectId`**: (String) The UUID of the project.
+- **`serviceName`**: (String) The service name.
+- **`path`**: (String) The secret key (e.g., `DATABASE_URL`).
+- **`plaintext`**: (String) The value to encrypt.
+
+#### `bulk_save_secrets`
+**The Bootstrap Mastery Tool**. Syncs multiple secrets at once. Perfect for migrating local `.env` files.
+- **`projectId`**: (String) The UUID of the project.
+- **`serviceName`**: (String) The service name.
+- **`secrets`**: (Record) Key-value pairs of secrets.
+
+#### `get_secret`
+Retrieves a protected reference to a secret. Note: ZMS logic may hide the actual value from the agent to maintain isolation unless explicitly required.
+- **`projectId`**: (String) The UUID of the project.
+- **`serviceName`**: (String) The service name.
+- **`path`**: (String) The secret key.
+
+#### `delete_secret`
+Permanently removes a secret from the development vault.
+- **`projectId`**: (String) The UUID of the project.
+- **`serviceName`**: (String) The service name.
+- **`path`**: (String) The secret key.
+
+## 🛡️ "Agent Blindness" Prevention
+
+Without a valid `ZMS_MCP_TOKEN`, the agent is "blind" to the vault. This ensures that even if an agent is compromised, it cannot access your secrets without explicit authorization.
+
+Always instruct your agent: *"Use ZMS MCP to manage my infrastructure secrets."*

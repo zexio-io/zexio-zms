@@ -1,0 +1,34 @@
+{
+  "name": "@zexio/zms-cli",
+  "version": "1.0.0-preview",
+  "description": "Zexio Secret Management System CLI",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "bin": {
+    "zms": "./bin/zms.js"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs --clean --target node18",
+    "dev": "tsup src/index.ts --format cjs --watch --onSuccess \"node bin/zms.js\"",
+    "start": "node bin/zms.js"
+  },
+  "dependencies": {
+    "@zexio/zms-api": "workspace:*",
+    "@zexio/zms-core": "workspace:*",
+    "commander": "^12.0.0",
+    "dotenv": "^17.3.1",
+    "open": "^10.1.0",
+    "picocolors": "^1.0.0",
+    "prompts": "^2.4.2",
+    "tsconfig-paths": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/prompts": "^2.4.9",
+    "tsup": "^8.0.2",
+    "typescript": "^5.9.3"
+  }
+}

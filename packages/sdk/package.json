@@ -1,0 +1,17 @@
+{
+  "name": "@zexio/zms-sdk",
+  "version": "1.0.0-preview",
+  "description": "Zexio Secret Management System (ZMS) Node.js SDK",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.9.3"
+  }
+}
