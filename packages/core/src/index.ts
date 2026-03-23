@@ -54,7 +54,6 @@ export function recoverMasterKey(shards: string[]): string {
 
 export * from './crypto.js';
 export * from './repository.js';
-export * from './rotator.js';
 export * from './lib/kms.js';
 export * from './lib/kms-provider.js';
 export * from './lib/google-kms-provider.js';

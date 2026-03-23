@@ -109,49 +109,6 @@ export async function listSecrets(
   return decrypted;
 }
 
-/**
- * Atomically re-encrypts a secret with a new salt and version.
- * Uses SELECT FOR UPDATE and version-checking (OCC).
- */
-export async function rotateSecret(
-  secretId: string,
-  oldSalt: string,
-  newSalt: string,
-  newVersion: number,
-  masterKey: string
-) {
-  return await db.transaction(async (tx) => {
-    const [result] = await tx.select().from(secrets).where(eq(secrets.id, secretId));
-    
-    if (!result) throw new Error(`Secret ${secretId} not found`);
-
-    // 2. Decrypt with old key
-    const plaintext = decrypt(result.encryptedBlob, masterKey, oldSalt);
-    const path = decrypt(result.encryptedPath, masterKey, oldSalt);
-
-    // 3. Re-encrypt with new key
-    const newEncryptedBlob = encrypt(plaintext, masterKey, newSalt);
-    const newEncryptedPath = encrypt(path, masterKey, newSalt);
-    const newIndexedPath = generatePathIndex(path, masterKey, newSalt);
-
-    // 4. Update with OCC (ensure version hasn't changed since SELECT)
-    const updateResult = await tx.update(secrets)
-      .set({
-        path: newIndexedPath,
-        encryptedPath: newEncryptedPath,
-        encryptedBlob: newEncryptedBlob,
-        keyVersion: newVersion,
-        updatedAt: new Date()
-      })
-      .where(and(
-        eq(secrets.id, secretId),
-        eq(secrets.keyVersion, result.keyVersion)
-      ));
-
-    return { status: 'rotated', id: secretId };
-  });
-}
-
 export async function deleteSecret(path: string, masterKey: string, serviceId: string, environmentId: string, salt?: string) {
   const indexedPath = generatePathIndex(path, masterKey, salt);
   
