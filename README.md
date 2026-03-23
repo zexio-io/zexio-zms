@@ -54,17 +54,7 @@ zms start
 ## 🤖 AI Agent Integration (MCP)
 ZMS is the first vault built specifically to prevent **Agentic Hallucination** of secrets. AI agents can list and request secrets via the MCP protocol securely.
 
-**Config for Claude Desktop:**
-```json
-{
-  "mcpServers": {
-    "zms": {
-      "command": "npx",
-      "args": ["-y", "@zexio/zms-cli", "mcp"]
-    }
-  }
-}
-```
+For step-by-step guides on connecting ZMS to Claude Desktop, Cursor, and other AI tools, please refer to our **[Agentic MCP Guide](https://zms.zexio.io/docs/agentic-mcp)**.
 
 ---
 
