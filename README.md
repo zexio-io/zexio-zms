@@ -1,4 +1,4 @@
-# ZMS: The Zero-Trust Vault for AI Agents 🕵️‍♂️🤖
+# ZMS: Zero-Trust Secrets for Agentic AI 🕵️‍♂️🤖
 
 [![GitHub Stars](https://img.shields.io/github/stars/zexio-io/zexio-zms?style=for-the-badge)](https://github.com/zexio-io/zexio-zms/stargazers)
 [![License](https://img.shields.io/badge/License-BSL%201.1-blue.svg?style=for-the-badge)](LICENSE)
