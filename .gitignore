@@ -26,4 +26,9 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-zms.db
+# Database / SQLite
+*.db
+*.db-journal
+*.sqlite
+*.shm
+*.wal
