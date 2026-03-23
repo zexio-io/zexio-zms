@@ -1,6 +1,6 @@
 {
   "name": "@zexio/zms-dashboard",
-  "version": "1.0.0-preview",
+  "version": "1.0.0",
   "author": "Zexio.io",
   "license": "BSL-1.1",
   "private": true,

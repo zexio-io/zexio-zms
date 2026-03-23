@@ -22,6 +22,18 @@ pnpm release           # Publishes to npm
 
 ---
 
+## 🛠️ Continuous Integration (CI)
+
+ZMS uses GitHub Actions to verify every code change via `.github/workflows/ci.yml`.
+
+### Verification Steps:
+1.  **Automated Testing**: Runs `pnpm test` across all packages in the monorepo.
+2.  **Build Integrity**: Runs `pnpm build` to ensure all packages (CLI, API, Dashboard, SDK, Docs) are buildable and free of type errors.
+
+Any Pull Request must pass the CI verification before it can be merged into `main`.
+
+---
+
 ## 🤖 CI/CD Release Workflow (GitHub Actions)
 
 ZMS is configured with an automated release pipeline via GitHub Actions (`.github/workflows/release.yml`).
@@ -34,7 +46,9 @@ ZMS is configured with an automated release pipeline via GitHub Actions (`.githu
     -   Create a GitHub Release with the corresponding changelog.
 
 ### Requirements:
--   **`NPM_TOKEN`**: Must be added to GitHub Repository Secrets for publishing.
+-   **OIDC (Trusted Publishing)**: Recommended. Set up each public package on npmjs.com > Settings > Trusted Publishers before merge.
+    -   GitHub Repository: `zexio-io/zexio-zms`
+    -   Workflow: `release.yml`
 -   **`GITHUB_TOKEN`**: Handled automatically by the action.
 
 ### Manual Trigger:

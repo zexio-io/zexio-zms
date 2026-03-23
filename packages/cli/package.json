@@ -1,7 +1,8 @@
 {
   "name": "@zexio/zms-cli",
-  "version": "1.0.0-preview",
+  "version": "1.0.0",
   "description": "Zexio Secret Management System CLI",
+  "license": "BSL-1.1",
   "type": "commonjs",
   "main": "./dist/index.js",
   "bin": {

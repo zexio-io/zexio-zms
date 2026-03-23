@@ -26,7 +26,7 @@
     "cli": "pnpm --filter @zexio/zms-cli",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish --access public --provenance"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",

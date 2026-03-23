@@ -1,7 +1,8 @@
 {
   "name": "@zexio/zms-sdk",
-  "version": "1.0.0-preview",
+  "version": "1.0.0",
   "description": "Zexio Secret Management System (ZMS) Node.js SDK",
+  "license": "BSL-1.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
