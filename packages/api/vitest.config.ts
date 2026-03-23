@@ -10,6 +10,7 @@ export default defineConfig({
     fileParallelism: false, // Run tests sequentially to avoid DB truncation collision
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@zexio/zms-core": path.resolve(__dirname, "../core/src/index.ts"),
     },
   },
 });
