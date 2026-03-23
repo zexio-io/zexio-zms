@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "README.md"
+      - "docs/**"
+      - "marketing/**"
+      - "LICENSE"
+      - "MAINTENANCE.md"
   workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
