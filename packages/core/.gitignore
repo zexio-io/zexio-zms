@@ -1,1 +1,2 @@
-dist
+dist*.db
+*.db-journal
