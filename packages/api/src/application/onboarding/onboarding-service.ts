@@ -9,14 +9,15 @@ export class OnboardingService {
   async setup(params: {
     orgName: string;
     userId: string;
-  }): Promise<any> {
-    // Execute all in one transaction
-    return await db.transaction(async (tx) => {
+  }, tx?: any): Promise<any> {
+    const client = tx || db;
+    // Execute all in one transaction (if not already in one)
+    const runInTx = async (workTx: any) => {
       // 1. Create Organization
-      const org = await this.orchSrv.createOrganization(params.orgName, params.userId, tx);
+      const org = await this.orchSrv.createOrganization(params.orgName, params.userId, workTx);
 
       // 2. Create Default Project & Environments
-      await this.orchSrv.createProjectWithDefaults(org.id, "Default Project", params.userId, ["api"], tx);
+      await this.orchSrv.createProjectWithDefaults(org.id, "Default Project", params.userId, ["api"], workTx);
 
       // 3. Generate Shamir Recovery Shards
       const recoveryShards = generateRecoveryShards(5, 3);
@@ -25,7 +26,9 @@ export class OnboardingService {
         organization: org,
         recoveryShards
       };
-    });
+    };
+
+    return tx ? await runInTx(tx) : await db.transaction(runInTx);
   }
 
   async getShards(userId: string): Promise<string[] | null> {

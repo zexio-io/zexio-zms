@@ -27,10 +27,8 @@
   "dependencies": {
     "@hono/mcp": "^0.2.4",
     "@hono/node-server": "^1.13.7",
-    "@hono/zod-openapi": "^0.18.3",
     "@hono/zod-validator": "^0.4.1",
     "@modelcontextprotocol/sdk": "^1.27.1",
-    "@scalar/hono-api-reference": "^0.10.4",
     "@zexio/zms-core": "workspace:*",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.3.1",
