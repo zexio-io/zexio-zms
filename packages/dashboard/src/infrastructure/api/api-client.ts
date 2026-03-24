@@ -25,7 +25,7 @@ export class ZmsApiClient {
 
     // Support for Better Auth token in header (if cookies fail)
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('better-auth.session_token');
+      const token = typeof window !== 'undefined' ? localStorage.getItem("zms.session_token") : null;
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
