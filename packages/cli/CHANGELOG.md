@@ -1,5 +1,20 @@
 # @zexio/zms-cli
 
+## 1.3.0
+
+### Minor Changes
+
+- eb79fdf: Automated Release: Transition to Pure Hono & Ultra-Lean Infrastructure (v1.1.0).
+  - Nuclear refactor to Pure Hono (removed OpenAPI/Scalar bloat).
+  - Purged heavy Cloud KMS SDKs for lean LocalFile distribution.
+  - Hardened atomic onboarding flow and dashboard context navigation.
+
+### Patch Changes
+
+- Updated dependencies [eb79fdf]
+  - @zexio/zms-api@1.3.0
+  - @zexio/zms-core@1.3.0
+
 ## 1.2.0
 
 ### Minor Changes
