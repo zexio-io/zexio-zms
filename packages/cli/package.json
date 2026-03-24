@@ -4,8 +4,7 @@
   "description": "Zexio Secret Management System CLI",
   "license": "BSL-1.1",
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -37,6 +36,7 @@
     "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "@types/prompts": "^2.4.9",
     "tsup": "^8.0.2",
     "typescript": "^5.9.3"

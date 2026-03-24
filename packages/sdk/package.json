@@ -4,8 +4,7 @@
   "description": "Zexio Secret Management System (ZMS) Node.js SDK",
   "license": "BSL-1.1",
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -21,6 +20,7 @@
     "build": "tsup src/index.ts --format cjs,esm --dts --clean"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "tsup": "^8.0.2",
     "typescript": "^5.9.3"
   }
