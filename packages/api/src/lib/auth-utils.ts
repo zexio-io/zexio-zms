@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.BETTER_AUTH_SECRET || 'zms-tactical-emergency-secret-key-change-this'
+  process.env.JWT_SECRET || process.env.BETTER_AUTH_SECRET || 'zms-tactical-emergency-secret-key-change-this'
 );
 
 export async function hashPassword(password: string): Promise<string> {
