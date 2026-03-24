@@ -31,7 +31,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "DATABASE_URL=file:./test.db npx drizzle-kit push && DATABASE_URL=file:./test.db vitest run --fileParallelism=false",
     "test:coverage": "vitest run --coverage"
   },
