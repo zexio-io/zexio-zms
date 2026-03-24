@@ -1,4 +1,4 @@
-import { OpenAPIHono } from '@hono/zod-openapi';
+import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
 import { secureHeaders } from 'hono/secure-headers';
@@ -38,7 +38,7 @@ function syncDatabase() {
 
 syncDatabase();
 
-const app = new OpenAPIHono();
+const app = new Hono();
 
 // Global Middlewares
 app.use('*', logger());

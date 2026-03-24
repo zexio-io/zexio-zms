@@ -1,4 +1,4 @@
-import { OpenAPIHono } from '@hono/zod-openapi';
+import { Hono } from 'hono';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPTransport } from '@hono/mcp';
 import { db, OrchestrationService, DrizzleOrchestrationRepository, saveSecret, getSecret, deleteSecret } from '@zexio/zms-core';
@@ -9,7 +9,7 @@ import crypto from 'crypto';
 import { z } from 'zod';
 import { AsyncLocalStorage } from 'async_hooks';
 
-export const mcpRouter = new OpenAPIHono();
+export const mcpRouter = new Hono();
 
 // Global Context for Multi-Tenant Payload Isolation
 export const mcpContext = new AsyncLocalStorage<{ orgId: string, tokenId: string }>();
@@ -79,7 +79,7 @@ mcpServer.registerTool('save_secret', {
 },
   async (args) => {
     const ctx = await resolveContext(args.projectId, args.serviceName);
-    const MASTER_KEY = schema.getGlobalMasterKey();
+    const MASTER_KEY = await getGlobalMasterKey();
     const result = await saveSecret(args.path, args.plaintext, MASTER_KEY, ctx.svc.id, ctx.env.id, ctx.org.tmkSalt);
     return { content: [{ type: 'text', text: `✅ Secret saved to development path: ${result.path} in ${ctx.project.name}` }] };
   }
@@ -95,7 +95,7 @@ mcpServer.registerTool('bulk_save_secrets', {
 },
   async (args) => {
     const ctx = await resolveContext(args.projectId, args.serviceName);
-    const MASTER_KEY = schema.getGlobalMasterKey();
+    const MASTER_KEY = await getGlobalMasterKey();
     let results = [];
 
     for (const [key, plaintext] of Object.entries(args.secrets)) {
@@ -117,7 +117,7 @@ mcpServer.registerTool('get_secret', {
 },
   async (args) => {
     const ctx = await resolveContext(args.projectId, args.serviceName);
-    const MASTER_KEY = getGlobalMasterKey();
+    const MASTER_KEY = await getGlobalMasterKey();
     const plaintext = await getSecret(args.path, MASTER_KEY, ctx.svc.id, ctx.env.id, ctx.org.tmkSalt);
 
     if (!plaintext) {
@@ -137,7 +137,7 @@ mcpServer.registerTool('delete_secret', {
 },
   async (args) => {
     const ctx = await resolveContext(args.projectId, args.serviceName);
-    const MASTER_KEY = getGlobalMasterKey();
+    const MASTER_KEY = await getGlobalMasterKey();
     await deleteSecret(args.path, MASTER_KEY, ctx.svc.id, ctx.env.id, ctx.org.tmkSalt);
     return { content: [{ type: 'text', text: `✅ Secret deleted.` }] };
   }

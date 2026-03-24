@@ -1,103 +1,36 @@
-import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import { Hono } from "hono";
+import { z } from "zod";
+import { zValidator } from "@hono/zod-validator";
 import { OnboardingService } from "../../application/onboarding/onboarding-service.js";
-import { OrchestrationService, DrizzleOrchestrationRepository } from "@zexio/zms-core";
-import { authGuard } from "../../middlewares/auth-guard.js";
+import { AppEnv } from "../../types/hono.js";
 
-export const onboardingRoutes = new OpenAPIHono();
+export const onboardingRoutes = new Hono<AppEnv>();
 
-// Initialize Services & Repositories
-const orchRepo = new DrizzleOrchestrationRepository();
-const orchSrv = new OrchestrationService(orchRepo);
-const onboardingSrv = new OnboardingService(orchSrv);
+const onboardingService = new OnboardingService();
 
-// Apply Security Middlewares
-onboardingRoutes.use("*", authGuard);
-onboardingRoutes.use("/shards", authGuard);
-
-// Schemas
-const onboardingSchema = z.object({
-  orgName: z.string().openapi({ example: "Example Inc." }),
-}).openapi("OnboardingInput");
-
-// Route Definition
-const setupRoute = createRoute({
-  method: 'post',
-  path: '/setup',
-  summary: 'Setup a new organization',
-  tags: ['Onboarding'],
-  request: {
-    body: {
-      content: {
-        'application/json': { schema: onboardingSchema }
-      }
-    }
-  },
-  responses: {
-    201: {
-      description: 'Organization setup successfully',
-      content: {
-        'application/json': {
-          schema: z.object({ success: z.boolean(), data: z.any() })
-        }
-      }
-    }
-  }
+// Schemas (Stripped of .openapi)
+const setupSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(8),
+  organizationName: z.string().min(2).optional(),
 });
 
-const getShardsRoute = createRoute({
-  method: 'get',
-  path: '/shards',
-  summary: 'Fetch pending recovery shards for auto-onboarded user',
-  tags: ['Onboarding'],
-  responses: {
-    200: {
-      description: 'Recovery shards found',
-      content: { 'application/json': { schema: z.object({ success: z.boolean(), data: z.object({ recoveryShards: z.array(z.string()) }) }) } }
-    },
-    404: {
-      description: 'No pending shards found'
-    }
-  }
-});
-
-// Route Handler
-onboardingRoutes.openapi(setupRoute, async (c) => {
-  const { orgName } = c.req.valid("json");
-  const userId = c.get("userId" as any);
-
-  const result = await onboardingSrv.setup({
-    orgName,
-    userId
-  });
-
-  return c.json({ 
-    success: true, 
-    data: { 
-      organization: {
-        id: result.organization.id,
-        name: result.organization.name
-      },
-      recoveryShards: result.recoveryShards
-    } 
-  }, 201);
-});
-
-onboardingRoutes.openapi(getShardsRoute, async (c) => {
-  const userId = c.get("userId" as any);
+// Handlers
+onboardingRoutes.post("/setup", zValidator("json", setupSchema), async (c) => {
+  const { name, email, password, organizationName } = c.req.valid("json");
 
   try {
-    const recoveryShards = await onboardingSrv.getShards(userId);
-    
-    if (!recoveryShards) {
-      return c.json({ success: false, error: "No pending shards found" }, 404);
-    }
-
-    return c.json({ 
-      success: true, 
-      data: { recoveryShards } 
-    }, 200);
+    const result = await onboardingService.setup(name, email, password, organizationName);
+    return c.json({
+      success: true,
+      data: {
+        userId: result.userId,
+        organizationId: result.organizationId,
+        recoveryKey: result.recoveryKey,
+      },
+    }, 201);
   } catch (error: any) {
-    console.error(`❌ Shard retrieval failed for user ${userId}:`, error);
-    return c.json({ success: false, error: "Internal Server Error" }, 500);
+    return c.json({ success: false, error: error.message }, 400);
   }
 });
