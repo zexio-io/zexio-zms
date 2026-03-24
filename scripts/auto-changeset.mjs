@@ -29,22 +29,34 @@ try {
   const changedPackages = new Set();
 
   // 2. Map files to package names
-  changedFiles.forEach(file => {
-    const segments = file.split('/');
-    if (segments[0] === 'packages' && segments[1]) {
-      const packagePath = path.join('packages', segments[1], 'package.json');
+  if (process.env.FORCE_ALL === 'true') {
+    console.log("🚀 ZMS: FORCE_ALL mode active. Including all packages.");
+    const allPkgs = fs.readdirSync('packages');
+    allPkgs.forEach(p => {
+      const packagePath = path.join('packages', p, 'package.json');
       if (fs.existsSync(packagePath)) {
-        try {
-          const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
-          if (pkg.name) {
-            changedPackages.add(pkg.name);
+        const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+        if (pkg.name) changedPackages.add(pkg.name);
+      }
+    });
+  } else {
+    changedFiles.forEach(file => {
+      const segments = file.split('/');
+      if (segments[0] === 'packages' && segments[1]) {
+        const packagePath = path.join('packages', segments[1], 'package.json');
+        if (fs.existsSync(packagePath)) {
+          try {
+            const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+            if (pkg.name) {
+              changedPackages.add(pkg.name);
+            }
+          } catch (e) {
+              // Skip invalid package.json
           }
-        } catch (e) {
-            // Skip invalid package.json
         }
       }
-    }
-  });
+    });
+  }
 
   if (changedPackages.size === 0) {
     console.log("💎 ZMS: No changes detected in packages. Skipping changeset generation.");
