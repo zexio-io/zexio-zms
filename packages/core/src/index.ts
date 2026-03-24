@@ -56,7 +56,6 @@ export * from './crypto.js';
 export * from './repository.js';
 export * from './lib/kms.js';
 export * from './lib/kms-provider.js';
-export * from './lib/google-kms-provider.js';
 export * from './lib/threshold-provider.js';
 export * from './recovery.js';
 export * from "./schema.js";
