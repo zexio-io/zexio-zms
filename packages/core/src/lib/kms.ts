@@ -1,21 +1,6 @@
-import { KmsProvider, EnvKmsProvider, LocalFileKmsProvider } from "./kms-provider.js";
-import { GoogleKmsProvider } from "./google-kms-provider.js";
-
-/**
- * KMS Factory
- * Choose the provider based on environment variables.
- */
 function getKmsProvider(): KmsProvider {
   const providerType = process.env.KMS_PROVIDER;
   
-  if (providerType === 'google') {
-    const secretName = process.env.GOOGLE_KMS_SECRET_NAME;
-    if (!secretName) {
-      throw new Error("GOOGLE_KMS_SECRET_NAME must be set when KMS_PROVIDER is 'google'");
-    }
-    return new GoogleKmsProvider(secretName);
-  }
-
   if (providerType === 'env') {
     return new EnvKmsProvider();
   }
