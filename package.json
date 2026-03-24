@@ -25,6 +25,7 @@
     "zms:stop": "pnpm zms stop",
     "cli": "pnpm --filter @zexio/zms-cli",
     "changeset": "changeset",
+    "changeset:auto": "node scripts/auto-changeset.mjs",
     "version-packages": "changeset version",
     "release": "changeset publish --access public --provenance"
   },
