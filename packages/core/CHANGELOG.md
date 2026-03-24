@@ -1,5 +1,16 @@
 # @zexio/zms-core
 
+## 1.4.0
+
+### Minor Changes
+
+- Automated patch for changes detected in:
+  - @zexio/zms-api
+  - @zexio/zms-cli
+  - @zexio/zms-core
+  - @zexio/zms-dashboard
+  - @zexio/zms-sdk
+
 ## 1.3.0
 
 ### Minor Changes

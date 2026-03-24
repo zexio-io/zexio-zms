@@ -17,29 +17,31 @@ try {
     console.log('⚠️ Could not fetch origin/main, falling back to local main.');
   }
 
-  const diffCmd = `git diff --name-only ${baseBranch}`;
-  let changedFiles = execSync(diffCmd).toString().split('\n').filter(Boolean);
-  
-  // Fallback: If no files changed against main, check the last commit (HEAD~1)
-  if (changedFiles.length === 0) {
-    console.log(`ℹ️ ZMS: No files changed against ${baseBranch}. Checking LAST COMMIT (HEAD~1)...`);
-    changedFiles = execSync('git diff --name-only HEAD~1 HEAD').toString().split('\n').filter(Boolean);
-  }
-
   const changedPackages = new Set();
 
-  // 2. Map files to package names
   if (process.env.FORCE_ALL === 'true') {
-    console.log("🚀 ZMS: FORCE_ALL mode active. Including all packages.");
+    console.log("🚀 ZMS: FORCE_ALL mode active. Including ALL packages for release.");
     const allPkgs = fs.readdirSync('packages');
     allPkgs.forEach(p => {
       const packagePath = path.join('packages', p, 'package.json');
       if (fs.existsSync(packagePath)) {
-        const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
-        if (pkg.name) changedPackages.add(pkg.name);
+        try {
+          const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+          if (pkg.name) changedPackages.add(pkg.name);
+        } catch (e) {}
       }
     });
   } else {
+    const diffCmd = `git diff --name-only ${baseBranch}`;
+    let changedFiles = execSync(diffCmd).toString().split('\n').filter(Boolean);
+    
+    // Fallback: If no files changed against main, check the last commit (HEAD~1)
+    if (changedFiles.length === 0) {
+      console.log(`ℹ️ ZMS: No files changed against ${baseBranch}. Checking LAST COMMIT (HEAD~1)...`);
+      changedFiles = execSync('git diff --name-only HEAD~1 HEAD').toString().split('\n').filter(Boolean);
+    }
+
+    // Map files to package names
     changedFiles.forEach(file => {
       const segments = file.split('/');
       if (segments[0] === 'packages' && segments[1]) {

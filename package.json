@@ -27,7 +27,7 @@
     "changeset": "changeset",
     "changeset:auto": "node scripts/auto-changeset.mjs",
     "version-packages": "changeset version",
-    "release": "changeset publish --access public --provenance",
+    "release": "changeset publish --access public",
     "launch": "pnpm changeset:auto && changeset version && pnpm release && git add . && git commit -m 'chore: manual release'",
     "launch:all": "FORCE_ALL=true pnpm launch"
   },
