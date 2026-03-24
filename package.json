@@ -28,7 +28,7 @@
     "changeset:auto": "node scripts/auto-changeset.mjs",
     "version-packages": "changeset version",
     "release": "changeset publish --access public --provenance",
-    "launch": "pnpm changeset:auto && changeset version && pnpm release && git add . && git commit -m 'chore: manual release' && git push origin main"
+    "launch": "pnpm changeset:auto && changeset version && pnpm release && git add . && git commit -m 'chore: manual release'"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",

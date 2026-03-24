@@ -17,7 +17,15 @@ try {
     console.log('⚠️ Could not fetch origin/main, falling back to local main.');
   }
 
-  const changedFiles = execSync(`git diff --name-only ${baseBranch}`).toString().split('\n').filter(Boolean);
+  const diffCmd = `git diff --name-only ${baseBranch}`;
+  let changedFiles = execSync(diffCmd).toString().split('\n').filter(Boolean);
+  
+  // Fallback: If no files changed against main, check the last commit (HEAD~1)
+  if (changedFiles.length === 0) {
+    console.log(`ℹ️ ZMS: No files changed against ${baseBranch}. Checking LAST COMMIT (HEAD~1)...`);
+    changedFiles = execSync('git diff --name-only HEAD~1 HEAD').toString().split('\n').filter(Boolean);
+  }
+
   const changedPackages = new Set();
 
   // 2. Map files to package names
