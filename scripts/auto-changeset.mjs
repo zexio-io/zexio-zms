@@ -45,7 +45,7 @@ try {
 
   // 3. Generate changeset content
   const pkgLines = Array.from(changedPackages)
-    .map(p => `"${p}": patch`)
+    .map(p => `"${p}": minor`)
     .join('\n');
 
   const content = `---
