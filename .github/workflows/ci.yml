@@ -1,14 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: ["main"]
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "marketing/**"
-      - "LICENSE"
-      - "MAINTENANCE.md"
   pull_request:
     branches: ["main"]
     paths-ignore:
