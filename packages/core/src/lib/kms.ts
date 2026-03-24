@@ -1,3 +1,5 @@
+import { KmsProvider, EnvKmsProvider, LocalFileKmsProvider } from "./kms-provider.js";
+
 function getKmsProvider(): KmsProvider {
   const providerType = process.env.KMS_PROVIDER;
   
