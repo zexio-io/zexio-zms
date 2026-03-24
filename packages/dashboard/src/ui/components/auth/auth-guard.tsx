@@ -11,7 +11,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Check localStorage for the session token
-    const token = localStorage.getItem("better-auth.session_token");
+    const token = localStorage.getItem("zms.session_token");
     const isLoginPage = pathname === "/login" || pathname === "/register";
 
     if (!token && !isLoginPage) {

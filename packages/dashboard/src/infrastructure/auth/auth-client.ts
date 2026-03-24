@@ -11,7 +11,7 @@ export const authClient = {
     });
     const data = await res.json();
     if (res.ok && data.token) {
-      localStorage.setItem("better-auth.session_token", data.token);
+      localStorage.setItem("zms.session_token", data.token);
       return { data, error: null };
     }
     return { data: null, error: { message: data.error || "Login failed" } };
@@ -25,14 +25,14 @@ export const authClient = {
     });
     const data = await res.json();
     if (res.ok && data.token) {
-      localStorage.setItem("better-auth.session_token", data.token);
+      localStorage.setItem("zms.session_token", data.token);
       return { data, error: null };
     }
     return { data: null, error: { message: data.error || "Setup failed" } };
   },
 
   async getSession() {
-    const token = localStorage.getItem("better-auth.session_token");
+    const token = localStorage.getItem("zms.session_token");
     if (!token) return { data: null };
 
     const res = await fetch(`${API_URL}/auth/session`, {
@@ -46,7 +46,7 @@ export const authClient = {
   },
 
   async signOut() {
-    localStorage.removeItem("better-auth.session_token");
+    localStorage.removeItem("zms.session_token");
     window.location.href = "/login";
   },
 };

@@ -80,7 +80,7 @@ export default function SetupPage() {
         // Setup successful, shards will be in data
         // Save token to localStorage as fallback for ZmsApiClient
         if (data?.token) { // Use optional chaining for data
-          localStorage.setItem('better-auth.session_token', data.token);
+          localStorage.setItem('zms.session_token', data.token);
         }
         // We have a session, proceed to onboarding recovery
         router.push("/onboarding/recovery");
