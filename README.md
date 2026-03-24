@@ -6,7 +6,7 @@
 
 **ZMS (Zexio Secret Management System)** is a high-performance, open-source secret management ecosystem designed for the agentic age. It eliminates plaintext `.env` files and puts your infrastructure behind a cryptographic shield.
 
-[Documentation](https://zms.zexio.io) | [Getting Started](https://zms.zexio.io/docs/getting-started) | [Discord](https://discord.gg/zexio) | [Twitter](https://twitter.com/zMS_zexio)
+[Documentation](https://zms.zexio.io) | [Getting Started](https://zms.zexio.io/docs/getting-started) | [Discord](https://discord.gg/qTMhjrD5Z7) | [Twitter](https://twitter.com/zexio_io)
 
 ---
 

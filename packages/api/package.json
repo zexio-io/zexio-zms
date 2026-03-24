@@ -20,7 +20,8 @@
   ],
   "scripts": {
     "dev": "tsx --watch --env-file=../../.env.local src/index.ts",
-    "build": "tsup src/index.ts --format cjs --clean",
+    "build:ui": "cd ../dashboard && pnpm build",
+    "build": "pnpm build:ui && tsup src/index.ts --format cjs --clean && mkdir -p dist/ui && cp -r ../dashboard/out/* dist/ui/",
     "start": "node dist/index.js",
     "test": "vitest run"
   },
