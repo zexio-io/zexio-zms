@@ -29,11 +29,11 @@ export default function RecoveryOnboardingPage() {
                     if (response.success) {
                         setTempShards(response.data.recoveryShards);
                     } else {
-                        router.push(`/dashboard/${activeOrg?.id || 'default'}/projects`);
+                        router.push(`/dashboard/o/projects`);
                     }
                 } catch (e) {
                     // If 404/Error, assume already onboarded and go to dashboard
-                    router.push(`/dashboard/${activeOrg?.id || 'default'}/projects`);
+                    router.push(`/dashboard/o/projects`);
                 }
             }
         };
@@ -70,7 +70,7 @@ export default function RecoveryOnboardingPage() {
     const handleProceed = () => {
         // Clear sensitive shards from memory
         setTempShards(null);
-        router.push(`/dashboard/${activeOrg?.id}/projects`);
+        router.push(`/dashboard/o/projects`);
     };
 
     return (

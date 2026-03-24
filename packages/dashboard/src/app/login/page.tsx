@@ -48,7 +48,7 @@ export default function LoginPage() {
       if (authError) {
         setError(authError.message || "Authorization Failed");
       } else {
-        router.push("/dashboard");
+        router.push("/dashboard/o/projects");
       }
     } catch (err) {
       setError("Tactical link failure. Please retry.");

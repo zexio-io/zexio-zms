@@ -79,9 +79,18 @@ export default function SetupPage() {
       } else {
         // Setup successful, shards will be in data
         // Save token to localStorage as fallback for ZmsApiClient
-        if (data?.token) { // Use optional chaining for data
+        if (data?.token) {
           localStorage.setItem('zms.session_token', data.token);
         }
+
+        // Set active organization in store for subsequent navigation
+        if (data?.data?.organizationId) {
+          useZmsStore.getState().setOrg({
+            id: data.data.organizationId,
+            name: `${name}'s Workspace`
+          });
+        }
+
         // We have a session, proceed to onboarding recovery
         router.push("/onboarding/recovery");
       }

@@ -64,58 +64,7 @@ app.use('/v1/*', (async (c: any, next: any) => {
 
 // --- Tactical Auth Routes ---
 
-app.post('/v1/auth/setup', async (c) => {
-  const { name, email, password } = await c.req.json();
-
-  // 1. Single-User Lock
-  const existingUser = await db.select().from(schema.user).limit(1);
-  if (existingUser.length > 0) {
-    return c.json({ error: 'System already initialized' }, 403);
-  }
-
-  // 2. Create User
-  const hashedPassword = await hashPassword(password);
-  const userId = crypto.randomUUID();
-
-  await db.insert(schema.user).values({
-    id: userId,
-    name,
-    email,
-    emailVerified: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
-
-  // Since we removed Better-Auth, we use the account table manually for password
-  await db.insert(schema.account).values({
-    id: crypto.randomUUID(),
-    accountId: userId,
-    providerId: 'credential',
-    userId: userId,
-    password: hashedPassword,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
-
-  // 3. Trigger Onboarding
-  const orchSrv = new OrchestrationService(new DrizzleOrchestrationRepository());
-  const onboardingSrv = new OnboardingService(orchSrv);
-
-  const result = await onboardingSrv.setup({
-    orgName: `${name}'s Workspace`,
-    userId: userId
-  });
-
-  // 4. Save shards for one-time fetch
-  await db.insert(schema.pendingOnboarding).values({
-    userId: userId,
-    recoveryShards: result.recoveryShards
-  });
-
-  // 5. Generate Session
-  const token = await createSessionToken(userId);
-  return c.json({ user: { id: userId, name, email }, token }, 200);
-});
+// --- Tactical Auth Routes (Moved to onboardingRoutes for /setup and shards) ---
 
 app.post('/v1/auth/login', async (c) => {
   const { email, password } = await c.req.json();
@@ -192,6 +141,7 @@ app.route('/v1/secrets', vaultRoutes);
 app.route('/v1/security', security);
 app.route('/v1/orgs', orchestrationRoutes);
 app.route('/v1/service-tokens', serviceTokenRoutes);
+app.route('/v1/auth', onboardingRoutes);
 app.route('/v1/onboarding', onboardingRoutes);
 app.route('/mcp', mcpRouter);
 

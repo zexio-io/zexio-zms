@@ -23,7 +23,7 @@ describe("Auth & Onboarding Lifecycle (Integration Journey)", () => {
     });
 
     const setupData = await setupRes.json();
-    expect(setupRes.status).toBe(200);
+    expect(setupRes.status).toBe(201);
     expect(setupData.user.email).toBe(testUser.email);
     expect(setupData.token).toBeDefined();
     
