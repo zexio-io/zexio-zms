@@ -1,5 +1,15 @@
 # @zexio/zms-sdk
 
+## 1.1.0
+
+### Minor Changes
+
+- Refactor API to Pure Hono for maximum performance and minimum footprint.
+  - Removed @hono/zod-openapi and Scalar SDK dependencies.
+  - Migrated all routes to standard Hono with zValidator.
+  - Purged cloud KMS SDKs (AWS/GCP) from core for ultra-lean distribution.
+  - Hardened onboarding flow with atomic transactions.
+
 ## 1.0.1
 
 ### Patch Changes
