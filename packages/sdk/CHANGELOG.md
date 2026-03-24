@@ -1,5 +1,14 @@
 # @zexio/zms-sdk
 
+## 1.2.0
+
+### Minor Changes
+
+- c0f4161: Automated Release: Transition to Pure Hono & Ultra-Lean Infrastructure (v1.1.0).
+  - Nuclear refactor to Pure Hono (removed OpenAPI/Scalar bloat).
+  - Purged heavy Cloud KMS SDKs for lean LocalFile distribution.
+  - Hardened atomic onboarding flow and dashboard context navigation.
+
 ## 1.1.0
 
 ### Minor Changes

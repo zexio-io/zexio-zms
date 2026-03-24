@@ -1,5 +1,14 @@
 # @zexio/zms-dashboard
 
+## 1.0.1
+
+### Patch Changes
+
+- c0f4161: Automated Release: Transition to Pure Hono & Ultra-Lean Infrastructure (v1.1.0).
+  - Nuclear refactor to Pure Hono (removed OpenAPI/Scalar bloat).
+  - Purged heavy Cloud KMS SDKs for lean LocalFile distribution.
+  - Hardened atomic onboarding flow and dashboard context navigation.
+
 ## 1.0.0
 
 ### Patch Changes
