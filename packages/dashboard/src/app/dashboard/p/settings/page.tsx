@@ -37,9 +37,8 @@ export default function ProjectSettingsPage() {
   const { data: projectResponse, isLoading } = useQuery({
     queryKey: ["project", projectId],
     queryFn: async () => {
-      if (!orgId || !projectId) return null;
-      ZmsApiClient.setContext(orgId);
-      const res: any = await ZmsApiClient.get(`/orgs/${orgId}/projects/${projectId}`);
+      if (!projectId) return null;
+      const res: any = await ZmsApiClient.get(`/projects/${projectId}`);
       if (res.data) {
         setName(res.data.name);
         setProject(res.data);
@@ -50,8 +49,7 @@ export default function ProjectSettingsPage() {
 
   const updateMutation = useMutation({
     mutationFn: async (newName: string) => {
-      ZmsApiClient.setContext(orgId);
-      const res: any = await ZmsApiClient.patch(`/orgs/${orgId}/projects/${projectId}`, { name: newName });
+      const res: any = await ZmsApiClient.patch(`/projects/${projectId}`, { name: newName });
       return res.data;
     },
     onSuccess: (updatedProject) => {
@@ -67,8 +65,7 @@ export default function ProjectSettingsPage() {
   const handleDeleteProject = async () => {
     setIsDeleting(true);
     try {
-      ZmsApiClient.setContext(orgId);
-      await ZmsApiClient.delete(`/orgs/${orgId}/projects/${projectId}`);
+      await ZmsApiClient.delete(`/projects/${projectId}`);
       
       toast.success("Project deleted successfully");
       

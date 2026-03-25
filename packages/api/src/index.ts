@@ -188,6 +188,42 @@ app.get('/v1/projects/:projectId/audit-logs', async (c) => {
   return formatAuditResponse(c, logs, total, page, limit);
 });
 
+// 2.5 Project Lifecycle
+app.get('/v1/projects/:projectId', async (c) => {
+  const projectId = c.req.param('projectId');
+  const orchService = new OrchestrationService(new DrizzleOrchestrationRepository());
+  const project = await orchService.getProjectById(projectId);
+  if (!project) return c.json({ success: false, error: 'Project not found' }, 404);
+  return c.json({ success: true, data: { id: project.id, name: project.name, organizationId: project.organizationId } });
+});
+
+app.patch('/v1/projects/:projectId', async (c) => {
+  const projectId = c.req.param('projectId');
+  const { name } = await c.req.json();
+  const userId = (c as any).get('userId');
+  const orchService = new OrchestrationService(new DrizzleOrchestrationRepository());
+  
+  const project = await orchService.getProjectById(projectId);
+  if (!project) return c.json({ success: false, error: 'Project not found' }, 404);
+
+  await orchService.updateProject(project.organizationId, projectId, { name }, userId);
+  const updated = await orchService.getProjectById(projectId);
+  
+  return c.json({ success: true, data: updated });
+});
+
+app.delete('/v1/projects/:projectId', async (c) => {
+  const projectId = c.req.param('projectId');
+  const userId = (c as any).get('userId');
+  const orchService = new OrchestrationService(new DrizzleOrchestrationRepository());
+
+  const project = await orchService.getProjectById(projectId);
+  if (!project) return c.json({ success: false, error: 'Project not found' }, 404);
+
+  await orchService.deleteProject(project.organizationId, projectId, userId);
+  return c.json({ success: true, message: 'Project deleted successfully' });
+});
+
 // 3. Project Environments (Flat)
 app.get('/v1/projects/:projectId/environments', async (c) => {
   const projectId = c.req.param('projectId');
