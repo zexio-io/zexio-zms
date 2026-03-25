@@ -1,5 +1,13 @@
 # @zexio/zms-cli
 
+## 1.4.1
+
+### Patch Changes
+
+- Updated dependencies [34034cb]
+  - @zexio/zms-api@1.4.1
+  - @zexio/zms-core@1.4.1
+
 ## 1.4.0
 
 ### Minor Changes
