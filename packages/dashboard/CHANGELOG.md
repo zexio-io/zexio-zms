@@ -1,5 +1,12 @@
 # @zexio/zms-dashboard
 
+## 1.1.1
+
+### Patch Changes
+
+- 34034cb: fix(api): add missing project management routes (patch and delete)
+  fix(dashboard): synchronize project settings and add premium error pages (400, 404, 500)
+
 ## 1.1.0
 
 ### Minor Changes
