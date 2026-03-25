@@ -66,12 +66,12 @@ export default function ProjectSettingsPage() {
     setIsDeleting(true);
     try {
       await ZmsApiClient.delete(`/projects/${projectId}`);
-      
+
       toast.success("Project deleted successfully");
-      
+
       // Clear active project and redirect
       setProject(null as any);
-      router.push(`/dashboard/${orgId}`);
+      router.push("/dashboard");
     } catch (error: any) {
       toast.error(error.message || "Failed to delete project");
       setIsDeleting(false); // Only reset if failed, otherwise redirecting anyway
@@ -88,7 +88,7 @@ export default function ProjectSettingsPage() {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <ProjectHeader 
+      <ProjectHeader
         title="Project Settings"
         description="Configure project-level metadata, security policies, and lifecycle settings."
       />
@@ -98,15 +98,15 @@ export default function ProjectSettingsPage() {
           <div className="grid gap-6 p-6 rounded-xl border bg-card">
             <div className="space-y-2">
               <label className="text-sm font-medium">Project Name</label>
-              <Input 
-                value={name} 
+              <Input
+                value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Project Name" 
+                placeholder="Project Name"
               />
             </div>
-            <Button 
-              size="sm" 
-              className="w-fit" 
+            <Button
+              size="sm"
+              className="w-fit"
               onClick={() => updateMutation.mutate(name)}
               disabled={updateMutation.isPending || !name || name === activeProject?.name}
             >
@@ -128,9 +128,9 @@ export default function ProjectSettingsPage() {
           </p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button 
-                variant="destructive" 
-                size="sm" 
+              <Button
+                variant="destructive"
+                size="sm"
                 className="gap-2"
                 disabled={isDeleting}
               >
@@ -143,14 +143,14 @@ export default function ProjectSettingsPage() {
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete the
-                  project <strong>{activeProject?.name}</strong> and all its associated secrets, 
+                  project <strong>{activeProject?.name}</strong> and all its associated secrets,
                   environments, and services.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction 
-                  variant="destructive" 
+                <AlertDialogAction
+                  variant="destructive"
                   onClick={handleDeleteProject}
                 >
                   Continue to Delete
