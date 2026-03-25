@@ -26,6 +26,7 @@ import {
 import { useRouter, useParams } from "next/navigation";
 import { useZmsStore } from "@/infrastructure/state/store";
 import { signOut } from "@/infrastructure/auth/auth-client";
+import { resolveOrgId, resolveProjectId } from "@/infrastructure/utils/utils";
 
 export function CommandPalette() {
   const [open, setOpen] = React.useState(false);
@@ -33,8 +34,8 @@ export function CommandPalette() {
   const params = useParams();
   const { activeOrg, activeProject } = useZmsStore();
 
-  const orgId = (params.orgId as string) || activeOrg?.id || "";
-  const projectId = (params.projectId as string) || activeProject?.id || "";
+  const orgId = resolveOrgId(params.orgId, activeOrg?.id);
+  const projectId = resolveProjectId(params.projectId, activeProject?.id);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {

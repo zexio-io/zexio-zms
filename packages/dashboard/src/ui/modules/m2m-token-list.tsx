@@ -16,6 +16,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/ui/components/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/ui/components/alert-dialog";
 
 import { resolveOrgId, resolveProjectId } from "@/infrastructure/utils/utils";
 import { useZmsStore } from "@/infrastructure/state/store";
@@ -26,6 +36,7 @@ export function ServiceTokenList({ serviceId }: { serviceId?: string }) {
   const orgId = resolveOrgId(params.orgId, activeOrg?.id);
   const projectId = resolveProjectId(params.projectId, activeProject?.id);
   const [isCreating, setIsCreating] = useState(false);
+  const [tokenToRevoke, setTokenToRevoke] = useState<any | null>(null);
   const queryClient = useQueryClient();
 
   // Use query params to filter by projectId or serviceId
@@ -40,17 +51,17 @@ export function ServiceTokenList({ serviceId }: { serviceId?: string }) {
     enabled: !!projectId && projectId !== "default",
   });
 
-  const handleRevoke = async (tokenId: string) => {
-    if (!confirm("Are you sure you want to revoke this token? It will stop working immediately.")) return;
-
+  const handleRevoke = async (token: any) => {
     try {
-      await ZmsApiClient.delete(`/service-tokens/${tokenId}`, {
+      await ZmsApiClient.delete(`/service-tokens/${token.id}`, {
         headers: { 'x-zms-organization-id': orgId }
       });
       toast.success("Token revoked successfully");
       refetch();
     } catch (e: any) {
       toast.error(e.message || "Failed to revoke token");
+    } finally {
+      setTokenToRevoke(null);
     }
   }
 
@@ -134,7 +145,7 @@ export function ServiceTokenList({ serviceId }: { serviceId?: string }) {
                   variant="ghost"
                   size="icon"
                   className="rounded-lg hover:text-destructive transition-colors"
-                  onClick={() => handleRevoke(token.id)}
+                  onClick={() => setTokenToRevoke(token)}
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -143,6 +154,28 @@ export function ServiceTokenList({ serviceId }: { serviceId?: string }) {
           ))}
         </div>
       )}
+
+      <AlertDialog open={!!tokenToRevoke} onOpenChange={(open) => !open && setTokenToRevoke(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Revoke Service Token?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to revoke <span className="font-bold text-foreground">"{tokenToRevoke?.name}"</span>? 
+              This token will stop working immediately across all systems. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              variant="destructive" 
+              onClick={() => handleRevoke(tokenToRevoke)}
+              disabled={isLoading}
+            >
+              Revoke Token
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

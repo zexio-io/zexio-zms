@@ -18,23 +18,29 @@ import { Key, Plus, Copy, Check, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { ZmsApiClient } from "@/infrastructure/api/api-client";
+import { resolveOrgId, resolveProjectId } from "@/infrastructure/utils/utils";
+import { useZmsStore } from "@/infrastructure/state/store";
 
 export function CreateTokenModal({ children, onSuccess }: { children: React.ReactNode, onSuccess?: () => void }) {
     const params = useParams();
+    const { activeOrg, activeProject } = useZmsStore();
+    const orgId = resolveOrgId(params.orgId, activeOrg?.id);
+    const projectId = resolveProjectId(params.projectId, activeProject?.id);
+
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [tokenData, setTokenData] = useState<{ token: string } | null>(null);
     const [copied, setCopied] = useState(false);
 
     const { data: services } = useQuery({
-        queryKey: ["project_services", params.projectId],
-        queryFn: () => ZmsApiClient.get<{ data: any[] }>(`/projects/${params.projectId}/services`),
+        queryKey: ["project_services", projectId],
+        queryFn: () => ZmsApiClient.get<{ data: any[] }>(`/projects/${projectId}/services`),
         enabled: open && !params.serviceId
     });
 
     const { data: envsData } = useQuery({
-        queryKey: ["project_envs", params.projectId],
-        queryFn: () => ZmsApiClient.get<{ data: any[] }>(`/projects/${params.projectId}/environments`),
+        queryKey: ["project_envs", projectId],
+        queryFn: () => ZmsApiClient.get<{ data: any[] }>(`/projects/${projectId}/environments`),
         enabled: open
     });
 
@@ -56,8 +62,8 @@ export function CreateTokenModal({ children, onSuccess }: { children: React.Reac
     });
 
     const handleCreate = async () => {
-        if (!form.name || !form.environmentId) {
-            toast.error("Please fill in all fields");
+        if (!form.name || !form.environmentId || !form.serviceId) {
+            toast.error("Please fill in all fields (Name, Service, and Environment)");
             return;
         }
 
@@ -65,8 +71,8 @@ export function CreateTokenModal({ children, onSuccess }: { children: React.Reac
         try {
             const res = await ZmsApiClient.post<{ token: string }>(`/service-tokens`, {
                 ...form,
-                projectId: params.projectId,
-                organizationId: params.orgId,
+                projectId: projectId,
+                organizationId: orgId,
             });
             setTokenData(res);
             toast.success("Service Token generated successfully!");
@@ -89,7 +95,14 @@ export function CreateTokenModal({ children, onSuccess }: { children: React.Reac
     return (
         <Dialog open={open} onOpenChange={(val) => {
             setOpen(val);
-            if (!val) setTokenData(null);
+            if (!val) {
+                setTokenData(null);
+                setForm({
+                    name: "",
+                    serviceId: (params.serviceId as string) || "",
+                    environmentId: "",
+                });
+            }
         }}>
             <DialogTrigger asChild>
                 {children}
@@ -106,7 +119,13 @@ export function CreateTokenModal({ children, onSuccess }: { children: React.Reac
                 </DialogHeader>
 
                 {!tokenData ? (
-                    <div className="space-y-6 py-4">
+                    <form 
+                        className="space-y-6 py-4"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleCreate();
+                        }}
+                    >
                         <div className="space-y-2">
                             <Label htmlFor="name" className="text-xs font-bold uppercase tracking-wider opacity-60">Token Name</Label>
                             <Input 
@@ -115,6 +134,7 @@ export function CreateTokenModal({ children, onSuccess }: { children: React.Reac
                                 className="rounded-xl bg-muted/30 border-none focus-visible:ring-primary/20"
                                 value={form.name}
                                 onChange={(e) => setForm({ ...form, name: e.target.value })}
+                                autoFocus
                             />
                         </div>
 
@@ -149,13 +169,13 @@ export function CreateTokenModal({ children, onSuccess }: { children: React.Reac
                         </div>
 
                         <Button 
+                            type="submit"
                             className="w-full rounded-2xl h-12 font-black shadow-lg shadow-primary/20" 
                             disabled={loading}
-                            onClick={handleCreate}
                         >
                             {loading ? "Generating..." : "Generate Token"}
                         </Button>
-                    </div>
+                    </form>
                 ) : (
                     <div className="space-y-6 py-4 animate-in zoom-in-95 duration-300">
                         <div className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-2xl flex items-start gap-3">

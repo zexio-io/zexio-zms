@@ -7,13 +7,17 @@ import { Button } from "@/ui/components/button";
 import { Skeleton } from "@/ui/components/skeleton";
 import { Plus, Shield, Globe, Lock, Trash2, Settings2, Fingerprint } from "lucide-react";
 import { Card, CardContent } from "@/ui/components/card";
+import { resolveOrgId } from "@/infrastructure/utils/utils";
+import { useZmsStore } from "@/infrastructure/state/store";
 
 export function ServiceAccountList() {
   const params = useParams();
+  const { activeOrg } = useZmsStore();
+  const orgId = resolveOrgId(params.orgId, activeOrg?.id);
 
   const { data: accounts, isLoading } = useQuery({
-    queryKey: ["service_accounts", params.orgId],
-    queryFn: () => ZmsApiClient.get<{ success: boolean; data: any[] }>(`/service-accounts?orgId=${params.orgId}`),
+    queryKey: ["service_accounts", orgId],
+    queryFn: () => ZmsApiClient.get<{ success: boolean; data: any[] }>(`/service-accounts?orgId=${orgId}`),
   });
 
   if (isLoading) {
