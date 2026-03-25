@@ -14,13 +14,13 @@ interface ErrorViewProps {
   className?: string;
 }
 
-export function ErrorView({ 
-  code, 
-  title, 
-  description, 
-  digest, 
+export function ErrorView({
+  code,
+  title,
+  description,
+  digest,
   reset,
-  className 
+  className
 }: ErrorViewProps) {
   return (
     <div className={cn(
@@ -30,14 +30,14 @@ export function ErrorView({
       <div className="max-w-md w-full space-y-8">
         {/* Animated Icon Layer */}
         <div className="relative flex justify-center">
-            <div className="absolute inset-0 bg-destructive/20 blur-3xl rounded-full scale-150 animate-pulse" />
-            <div className="relative p-6 rounded-[2.5rem] bg-card/40 backdrop-blur-xl border border-destructive/20 shadow-2xl">
-                {code === 404 ? (
-                    <AlertTriangle className="w-16 h-16 text-destructive" />
-                ) : (
-                    <ShieldAlert className="w-16 h-16 text-destructive" />
-                )}
-            </div>
+          <div className="absolute inset-0 bg-destructive/20 blur-3xl rounded-full scale-150 animate-pulse" />
+          <div className="relative p-6 rounded-[2.5rem] bg-card/40 backdrop-blur-xl border border-destructive/20 shadow-2xl">
+            {code === 404 ? (
+              <AlertTriangle className="w-16 h-16 text-destructive" />
+            ) : (
+              <ShieldAlert className="w-16 h-16 text-destructive" />
+            )}
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -63,7 +63,7 @@ export function ErrorView({
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
           {reset && (
-            <Button 
+            <Button
               onClick={reset}
               className="w-full sm:w-auto gap-2 h-12 px-8 rounded-xl"
               variant="default"
@@ -72,12 +72,12 @@ export function ErrorView({
               Try Again
             </Button>
           )}
-          <Button 
+          <Button
             asChild
             variant="secondary"
             className="w-full sm:w-auto gap-2 h-12 px-8 rounded-xl"
           >
-            <Link href="/dashboard/o">
+            <Link href="/dashboard">
               <Home className="w-4 h-4" />
               Return Home
             </Link>
